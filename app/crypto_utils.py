@@ -1,20 +1,18 @@
 import base64
-from cryptography.hazmat.primitives import hashes, serialization
+from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 
 
 def decrypt_seed(encrypted_seed_b64: str, private_key_path: str) -> str:
-    # Load private key
-    with open(private_key_path, "rb") as f:
+    with open(private_key_path, "rb") as key_file:
         private_key = serialization.load_pem_private_key(
-            f.read(),
+            key_file.read(),
             password=None,
         )
 
-    # Decode base64 ciphertext
     encrypted_bytes = base64.b64decode(encrypted_seed_b64)
 
- seed_bytes = private_key.decrypt(
+    seed_bytes = private_key.decrypt(
         encrypted_bytes,
         padding.OAEP(
             mgf=padding.MGF1(algorithm=hashes.SHA256()),
@@ -23,7 +21,6 @@ def decrypt_seed(encrypted_seed_b64: str, private_key_path: str) -> str:
         ),
     )
 
-    # Convert BYTES → HEX (THIS IS THE FIX)
     seed_hex = seed_bytes.hex()
 
     if len(seed_hex) != 64:
