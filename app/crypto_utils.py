@@ -13,8 +13,8 @@ def decrypt_seed(encrypted_seed_b64: str, private_key_path: str) -> str:
 
     # Decode base64 ciphertext
     encrypted_bytes = base64.b64decode(encrypted_seed_b64)
-# Decrypt using RSA-OAEP + SHA256
-    decrypted = private_key.decrypt(
+
+ seed_bytes = private_key.decrypt(
         encrypted_bytes,
         padding.OAEP(
             mgf=padding.MGF1(algorithm=hashes.SHA256()),
@@ -23,10 +23,9 @@ def decrypt_seed(encrypted_seed_b64: str, private_key_path: str) -> str:
         ),
     )
 
-    # Convert bytes → hex string
-    seed_hex = decrypted.hex()
+    # Convert BYTES → HEX (THIS IS THE FIX)
+    seed_hex = seed_bytes.hex()
 
-    # Validate length (must be 64 hex chars)
     if len(seed_hex) != 64:
         raise ValueError("Decrypted seed must be 64 hex characters")
 
