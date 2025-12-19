@@ -1,8 +1,10 @@
 import requests
 import json
 
-STUDENT_ID = "23A91A1214"
+# CHANGE THESE TWO VALUES
+STUDENT_ID = "23A91A1214"   # ← put your real student ID here
 REPO_URL = "https://github.com/A91A1214/pki-2fa-microservice"
+
 API_URL = "https://eajeyq4r3zljoq4rpovy2nthda0vtjqf.lambda-url.ap-south-1.on.aws"
 
 # Read your public key
@@ -14,7 +16,6 @@ payload = {
     "github_repo_url": REPO_URL,
     "public_key": public_key
 }
-
 print("Sending request...")
 response = requests.post(API_URL, json=payload, timeout=20)
 
