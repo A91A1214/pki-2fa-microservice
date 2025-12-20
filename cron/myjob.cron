@@ -1,0 +1,2 @@
+# Example: Run a script every minute
+* * * * * /usr/local/bin/python /app/scripts/my_script.py >> /data/cron.log 2>&1

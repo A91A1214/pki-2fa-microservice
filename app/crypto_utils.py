@@ -21,9 +21,10 @@ def decrypt_seed(encrypted_seed_b64: str, private_key_path: str) -> str:
         ),
     )
 
-    seed_hex = seed_bytes.hex()
+    # IMPORTANT FIX 👇
+    seed_hex = seed_bytes.decode().strip()
 
     if len(seed_hex) != 64:
-        raise ValueError("Decrypted seed must be 64 hex characters")
+        raise ValueError(f"Decrypted seed length invalid: {len(seed_hex)}")
 
     return seed_hex
